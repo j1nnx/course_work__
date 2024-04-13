@@ -14,3 +14,5 @@ def test_form_mask_credit_card_number():
 
 if __name__ == "__main__":
     pytest.main()
+
+print('Всё выводит ты красавчик')
