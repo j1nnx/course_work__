@@ -16,12 +16,12 @@ def sample_data() -> list:
 
 
 def test_filters_dicts_by_state(sample_data: list) -> None:
-    filtered_list = filter_dicts_by_state(dict_list, "CANCELED")
+    filtered_list = filter_dicts_by_state(sample_data, "CANCELED")
     assert all(dict_["state"] == "CANCELED" for dict_ in filtered_list)
 
 
 def test_sort_dicts_by_date(sample_data: list) -> None:
-    sorted_ = sort_dicts_by_date(dict_list)
+    sorted_ = sort_dicts_by_date(sample_data)
     dates = [dicts["date"] for dicts in sorted_]
     assert dates == [
         "2019-07-03T18:35:29.512364",
@@ -35,10 +35,3 @@ def test_sort_dicts_by_date(sample_data: list) -> None:
 def test_filter_dicts_by_state_with_params(sample_data: list, state: str) -> None:
     filtered_list = filter_dicts_by_state(sample_data, state)
     assert all(dict_["state"] == state for dict_ in filtered_list)
-
-
-if __name__ == "__main__":
-    pytest.main()
-    test_filters_dicts_by_state(sample_data())
-    test_sort_dicts_by_date(sample_data())
-    print("Всё выводит ты красавчик")
