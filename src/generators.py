@@ -1,3 +1,5 @@
+from typing import Iterator
+
 transactions = [
     {
         "id": 939719570,
@@ -47,4 +49,22 @@ transactions = [
 ]
 
 
+def filter_by_currency(transactions: list, currency: str) -> Iterator[dict]:
+    """функция, которая принимает список словарей, и возвращает итератор"""
+    for transaction in transactions:
+        if transaction["operationAmount"]["currency"]["code"] == currency:
+            yield transaction
 
+
+def transaction_descriptions(transactions: list) -> Iterator[str]:
+    """Генератор, который принимает список словарей и возвращает описание каждой операции по очереди."""
+    for transaction in transactions:
+        yield transaction["description"]
+
+
+def card_number_generator(start: int, end: int) -> Iterator[str]:
+    """генератор номеров банковских карт, который должен генерировать номера карт в формате
+    "XXXX XXXX XXXX XXXX", где X — цифра"""
+    for item in range(start, end + 1):
+        result = str(item).zfill(16)
+        yield f"{result[:4]} {result[4:8]} {result[8:12]} {result[12:]}"
