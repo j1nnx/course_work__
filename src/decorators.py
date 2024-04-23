@@ -24,7 +24,15 @@ def log(filename: Optional[str] = None) -> Callable[[Callable], Callable]:
                 print(log_message)
 
             return result
+
         return wrapper
+
     return decorator
 
 
+@log(filename="mylog.txt")
+def my_function(x: int, y: int) -> int:
+    return x + y
+
+
+my_function(1, 2)

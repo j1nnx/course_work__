@@ -1,10 +1,6 @@
-2024-04-23 16:03:11 my_function ok
-2024-04-23 16:03:36 my_function ok
-2024-04-23 16:03:38 my_function ok
-2024-04-23 16:03:40 my_function ok
-2024-04-23 16:03:49 my_function ok
-2024-04-23 16:03:59 my_function ok
-2024-04-23 16:04:02 my_function ok
-2024-04-23 16:04:04 my_function ok
-2024-04-23 16:04:06 my_function ok
-2024-04-23 16:04:27 my_function ok
+
+2024-04-23 17:05:24 my_function ok
+2024-04-23 17:26:11 my_function ok
+2024-04-23 17:27:40 my_function ok
+2024-04-23 17:32:46 my_function ok
+2024-04-23 17:35:02 my_function ok
