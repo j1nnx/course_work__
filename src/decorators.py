@@ -4,9 +4,14 @@ from typing import Any, Callable, Optional, Tuple
 
 
 def log(filename: Optional[str] = None) -> Callable[[Callable], Callable]:
+    """Декоратор для логгирования действий функции."""
+
     def decorator(func: Callable) -> Callable:
+        """Обертка декоратора для функции."""
+
         @wraps(func)
         def wrapper(*args: Tuple[Any], **kwargs: Any) -> Any:
+            """Внутренняя обертка для функции, выполняющая логирование."""
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             log_message = f"{timestamp} {func.__name__}"
 
@@ -14,7 +19,7 @@ def log(filename: Optional[str] = None) -> Callable[[Callable], Callable]:
                 result = func(*args, **kwargs)
                 log_message += " ok\n"
             except Exception as e:
-                log_message += f"error: {type(e).__name__}. Inputs: {args} {kwargs}\n"
+                log_message += f" error: {type(e).__name__}. Inputs: {args} {kwargs}\n"
                 result = None
 
             if filename:
@@ -28,11 +33,3 @@ def log(filename: Optional[str] = None) -> Callable[[Callable], Callable]:
         return wrapper
 
     return decorator
-
-
-@log(filename="mylog.txt")
-def my_function(x: int, y: int) -> int:
-    return x + y
-
-
-my_function(1, 2)
