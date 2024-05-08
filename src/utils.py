@@ -1,12 +1,12 @@
 import json
 import os
-from typing import Dict, List, Union, Any
-from dotenv import load_dotenv
+from typing import Any, Dict, List, Union
+
 import requests
+from dotenv import load_dotenv
 
 load_dotenv()
-
-API_KEY = os.getenv('api_keys')
+API_KEY = os.getenv("api_keys")
 
 
 def read_transaction_from_file_json(file_path: str) -> List[Dict[str, Union[str, float]]]:
@@ -25,11 +25,12 @@ def read_transaction_from_file_json(file_path: str) -> List[Dict[str, Union[str,
             return []
 
 
-def get_transactions_rub_too_usd(currency: str) -> Any:
-    """Получаает курс валюты в рублях по отношения к USD и EUR"""
+def get_transactions_rub_to_usd(currency: str) -> Any:
+    """Получает курс валюты в рублях по отношению к USD и EUR"""
     url = f'https://api.apilayer.com/exchangerates_data/latest?symbols=RUB&base={currency}'
+    headers = {'apikey': API_KEY}
     try:
-        response = requests.get(url, headers={'apikey': API_KEY}, timeout=5)
+        response = requests.get(url, headers=headers, timeout=5)
         response.raise_for_status()
         response_data = response.json()
         return response_data['rates']['RUB']
@@ -42,41 +43,13 @@ def sum_amount_from_transactions(transactions: List[Dict]) -> float:
     total = 0.0
     for transact in transactions:
         operation_sum = transact.get('operationAmount', {})
-        currency_ = operation_sum.get('currency', {}).get("code")
-        amount = float(operation_sum.get('amoumt', 0))
-        if currency_ == 'RUB':
+        currency_code = operation_sum.get('currency', {}).get('code', '')
+        amount = float(operation_sum.get('amount', 0.0))
+        if currency_code in ['USD', 'EUR']:
+            rate_to_rub = get_transactions_rub_to_usd(currency_code)
+            total += amount * rate_to_rub
+        elif currency_code == 'RUB':
             total += amount
-        elif currency_ in ['USD', 'EUR']:
-            rate = get_transactions_rub_too_usd(currency_)
-            total += amount * rate
-        else:
-            print(f'Валюта не известна: {currency_}')
     return total
-
-
-value = {
-    "id": 441945886,
-    "state": "EXECUTED",
-    "date": "2019-08-26T10:50:58.294041",
-    "operationAmount": {
-      "amount": "31957.58",
-      "currency": {
-        "name": "руб.",
-        "code": "RUB"
-      }
-    },
-    "description": "Перевод организации",
-    "from": "Maestro 1596837868705199",
-    "to": "Счет 64686473678894779589"
-  }
-
-print(get_transactions_rub_too_usd(value('currency')))
-
-
-
-
-
-
-
 
 
