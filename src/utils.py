@@ -40,6 +40,7 @@ def get_transactions_rub_to_usd(currency: str) -> Any:
 
 
 def sum_amount_from_transactions(transactions: List[Dict]) -> float:
+    """Returns the sum if transactions in Rub"""
     total = 0.0
     for transact in transactions:
         operation_sum = transact.get('operationAmount', {})
