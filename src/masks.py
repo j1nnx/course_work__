@@ -22,6 +22,7 @@ def mask_account_number(account_number: str) -> str:
         return masked_number
     else:
         logger.error('With the function mask_account_number something is wrong')
+    return account_number
 
 
 mask_credit_card_number("1234567890123456")
