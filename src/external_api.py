@@ -1,17 +1,18 @@
 import json
-import os
-from src.logger import setup_logger
-import requests
-from typing import Any
-from dotenv import load_dotenv
 import logging
+import os
+from typing import Any
 
+import requests
+from dotenv import load_dotenv
+
+from src.logger import setup_logger
 
 logger = setup_logger()
 
 
 load_dotenv()
-API_KEY = os.getenv('api_keys')
+API_KEY = os.getenv("api_keys")
 
 
 def get_currency_rate(currency: Any) -> Any:

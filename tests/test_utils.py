@@ -15,9 +15,7 @@ class TestTransactionSum(unittest.TestCase):
     def test_sum_amount_with_mocked_rate(self) -> None:
         # Создаем фиктивный ответ API
         mock_rate: float = 75.0
-        transaction: Dict[str, Any] = {
-            "operationAmount": {"amount": "500", "currency": {"code": "USD"}}
-        }
+        transaction: Dict[str, Any] = {"operationAmount": {"amount": "500", "currency": {"code": "USD"}}}
         expected_total: float = 500 * mock_rate
 
         with patch("src.utils.get_transactions_rub_to_usd", return_value=mock_rate) as mock_method:
@@ -27,9 +25,7 @@ class TestTransactionSum(unittest.TestCase):
 
     def test_sum_amount_with_real_data(self) -> None:
         # Используем реальные данные для тестирования
-        transaction: Dict[str, Any] = {
-            "operationAmount": {"amount": "31957.58", "currency": {"code": "RUB"}}
-        }
+        transaction: Dict[str, Any] = {"operationAmount": {"amount": "31957.58", "currency": {"code": "RUB"}}}
         amount_in_rub: float = float(transaction["operationAmount"]["amount"])
         total: float = sum_amount(transaction)
         self.assertEqual(total, amount_in_rub)
