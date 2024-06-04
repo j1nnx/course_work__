@@ -15,4 +15,5 @@ def filter_dicts_by_state(dict_list: List[Dict[str, int | str]], state: str = "E
 
 def sort_dicts_by_date(dict_list: List[Dict[str, int | str]], reverse: bool = True) -> List[Dict[str, int | str]]:
     """Сортирует список словарей по убыванию даты"""
+    reverse = reverse == "decreasing"
     return sorted(dict_list, key=lambda x: x["date"], reverse=reverse)

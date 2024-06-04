@@ -16,7 +16,7 @@ def test_file_from_file_csv() -> None:
 
 
 def test_read_transactions_csv_invalid_file() -> None:
-    """Тест для файла transactions.csv """
+    """Тест для файла transactions.csv"""
     file_path = "data.txt"
     transactions_ = read_file_from_file_csv(file_path)
     assert transactions_ == []
