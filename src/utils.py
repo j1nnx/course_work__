@@ -1,6 +1,6 @@
 import json
-import os
-from typing import Any, Dict, List, Union
+from pathlib import Path
+from typing import Any, Dict, List
 
 from src.external_api import get_currency_rate
 from src.logger import setup_logger
@@ -8,22 +8,18 @@ from src.logger import setup_logger
 logger = setup_logger()
 
 
-def read_transaction_from_file_json(file_path: str) -> List[Dict[str, Union[str, float]]]:
-    """Читает транзакции из файла в формате JSON и возвращает список транзакций"""
-    if not os.path.exists(file_path):
-        return []
-
-    with open(file_path, "r") as file:
-        try:
-            data = json.load(file)
-            if isinstance(data, list):
-                logger.info("The read_json_file function was executed successfully".encode("utf-8"))
-                return data
-            else:
-                return []
-        except json.decoder.JSONDecodeError:
-            logger.error("JSON decoding error")
+def read_transaction_from_file_json(file_path: Path) -> List[Dict[str, Any]]:
+    """Считывает транзакции из JSON-файла."""
+    try:
+        with open(file_path, encoding="utf-8") as f:
+            data = json.load(f)
+        if isinstance(data, list):
+            return data
+        else:
             return []
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        logger.error(f"Ошибка при чтении JSON-файла: {e}")
+        return []
 
 
 def sum_amount(transaction: Dict[str, Any]) -> float:

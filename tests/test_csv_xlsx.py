@@ -4,13 +4,13 @@ from unittest.mock import patch
 
 import pandas as pd
 
-from src.csv_xlsx import read_file_from_file_csv, read_file_from_file_xlsx
+from src.csv_xlsx import read_csv, read_file_from_file_xlsx
 
 
 def test_file_from_file_csv() -> None:
     """Тесты для функции test_file_from_file_csv"""
     file_path = "../data/transactions.csv"
-    transactions = read_file_from_file_csv(file_path)
+    transactions = read_csv(file_path)
     assert isinstance(transactions, list)
     assert all(isinstance(transaction, dict) for transaction in transactions)
 
@@ -18,7 +18,7 @@ def test_file_from_file_csv() -> None:
 def test_read_transactions_csv_invalid_file() -> None:
     """Тест для файла transactions.csv"""
     file_path = "data.txt"
-    transactions_ = read_file_from_file_csv(file_path)
+    transactions_ = read_csv(file_path)
     assert transactions_ == []
 
 

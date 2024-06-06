@@ -1,24 +1,25 @@
 import re
-from typing import Any, Dict, List, Iterator
+from pathlib import Path
+from typing import Any, Dict, Iterator, List
 
-from src.csv_xlsx import read_file_from_file_csv, read_file_from_file_xlsx
-from src.generators import filter_by_currency, transaction_descriptions
+from src.csv_xlsx import read_csv, read_file_from_file_xlsx
+from src.generators import transaction_descriptions
 from src.handler import search_transactions
 from src.processing import filter_dicts_by_state, sort_dicts_by_date
 from src.utils import read_transaction_from_file_json, sum_amount
 from src.widget import convert_datetime_to_date, masks_of_cards
 
 
-def format_open_file() -> List[Dict[Any, Any]]:
+def format_open_file() -> Any:
     """Функция для открытия определённого файла"""
     print("Привет! Добро пожаловать в программу работы с банковскими транзакициями.")
     file_open = input("Выберите необходимый пункт меню: 1.JSON 2.CSV 3.Excel\n")
     if file_open == "1" or file_open.lower() == "json":
         print("Для обработки выбран json файл.")
-        return read_transaction_from_file_json("../data/operatione.json")
+        return read_transaction_from_file_json(Path("data/operatione.json"))
     elif file_open == "2" or file_open.lower() == "csv":
         print("Для обработки выбран CSV файл.")
-        return read_file_from_file_csv("data/transactions.csv")
+        return read_csv("data/transactions.csv")
     elif file_open == "3" or file_open.lower() == "excel":
         print("Для обработки выбран Excel файл.")
         return read_file_from_file_xlsx("data/transactions_excel.xlsx")
@@ -38,7 +39,7 @@ def filter_status(data: List[Dict[Any, Any]]) -> List[Dict[Any, Any]]:
     return filter_dicts_by_state(data, format_)
 
 
-def sort_by_date(data: List[Dict[Any, Any]]) -> List[Dict[Any, Any]]:
+def sort_by_date(data: List[Dict[Any, Any]]) -> List[Dict[Any, Any]] | Iterator[dict]:
     """Сортирует список транзакций"""
     sort = input("Отсортировать операции по дате? Да/Нет \n")
     if sort.lower() == "да":
@@ -51,19 +52,9 @@ def sort_by_date(data: List[Dict[Any, Any]]) -> List[Dict[Any, Any]]:
             print("Не коректное значение, введите ещё раз")
             return sort_by_date(data)
     elif sort.lower() == "нет":
-        return data  # Возвращаем исходный список, если сортировка не нужна
-    else:
-        print("Не корректный ответ, повторите ввод")
-        return sort_by_date(data)
-
-    # Фильтрация по валюте должна быть выполнена после сортировки
-    sort_rub = input("Выводить только рублевые тразакции? Да/Нет\n")
-    if sort_rub.lower() == "да":
-        return filter_by_currency(data, "RUB")
-    elif sort_rub.lower() == "нет":
         return data
     else:
-        print("Некорректный ответ, повторите ввод")
+        print("Не корректный ответ, повторите ввод")
         return sort_by_date(data)
 
 
