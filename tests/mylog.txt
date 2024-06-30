@@ -1,6 +1,0 @@
-
-2024-04-23 17:05:24 my_function ok
-2024-04-23 17:26:11 my_function ok
-2024-04-23 17:27:40 my_function ok
-2024-04-23 17:32:46 my_function ok
-2024-04-23 17:35:02 my_function ok

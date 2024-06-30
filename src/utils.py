@@ -1,53 +1,55 @@
 import json
+import logging
+from logging import Logger
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
-from src.external_api import get_currency_rate
-from src.logger import setup_logger
+import pandas as pd
+
+
+def setup_logger() -> Logger:
+    """Функция настройки логгера"""
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s", encoding="utf-8")
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+
+    file_handler = logging.FileHandler("logger.log", mode="w")
+    file_handler.setLevel(logging.DEBUG)
+
+    formatter_ = logging.Formatter("%(asctime)s - %(module)s - %(levelname)s - %(message)s")
+    file_handler.setFormatter(formatter_)
+
+    logger.addHandler(file_handler)
+
+    return logger
+
 
 logger = setup_logger()
 
 
-def read_transaction_from_file_json(file_path: Path) -> List[Dict[str, Any]]:
-    """Считывает транзакции из JSON-файла."""
-    try:
-        with open(file_path, encoding="utf-8") as f:
-            data = json.load(f)
-        if isinstance(data, list):
-            return data
-        else:
-            return []
-    except (FileNotFoundError, json.JSONDecodeError) as e:
-        logger.error(f"Ошибка при чтении JSON-файла: {e}")
-        return []
-
-
-def sum_amount(transaction: Dict[str, Any]) -> float:
-    """Возвращает сумму транзакции в рублях."""
-    total = 0.0
-    operation_sum = transaction.get("operationAmount", {})
-    currency_code = operation_sum.get("currency", {}).get("code", "")
-    amount = float(operation_sum.get("amount", 0.0))
-    if currency_code in ["USD", "EUR"]:
-        rate_to_rub = get_currency_rate(currency_code)
-        total += amount * rate_to_rub
-    elif currency_code == "RUB":
-        total += amount
-        logger.info("Function sum_amount completed successfully")
-        return total
+def read_file_xls(filename: Any) -> Any:
+    """Функция чтения файла .xls"""
+    if Path(filename).suffix.lower() == ".xls":
+        df = pd.read_excel(filename)
+        logger.info("Successfully read file")
+        return df.to_dict(orient="records")
+    elif Path(filename).suffix.lower() == ".json":
+        with open(filename, "r", encoding="utf-8") as file:
+            logger.info("Successfully read file")
+            return json.load(file)
     else:
-        logger.error("Something went wrong with the sum_amount function: %(error)s")
-    return total
+        logger.error(f"С функцией read_file_xls что-то не так")
+        print("Неверный формат файла")
 
 
-value = {
-    "id": 441945886,
-    "state": "EXECUTED",
-    "date": "2019-08-26T10:50:58.294041",
-    "operationAmount": {"amount": "31957.58", "currency": {"name": "руб.", "code": "RUB"}},
-    "description": "Перевод организации",
-    "from": "Maestro 1596837868705199",
-    "to": "Счет 64686473678894779589",
-}
-
-sum_amount(value)
+def write_data(file: str, result: Any) -> None:
+    """Функция которая записывает резуьтаты в указанный файл."""
+    try:
+        if file.endswith(".txt"):
+            with open(file, "a") as file:
+                file.write(result)
+        else:
+            with open(file, "w") as file:
+                json.dump(result, file, indent=4, ensure_ascii=False)
+    except Exception as e:
+        logger.error(f"Ошибка при записи файла {file}: {e}")
