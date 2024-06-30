@@ -3,14 +3,7 @@ from datetime import datetime
 from src.reports import wastes_by_category
 from src.services import filter_by_state
 from src.utils import read_file_xls, write_data
-from src.views import (
-    card_number,
-    cashback,
-    create_operations,
-    get_greeting,
-    top_transaction,
-    total_sum_amount,
-)
+from src.views import card_number, cashback, create_operations, get_greeting, top_transaction, total_sum_amount
 
 
 def main() -> None:
