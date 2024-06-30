@@ -12,6 +12,7 @@ logger = setup_logger()
 def report_to_file() -> Any:
     """Функция, которая принимает на вход список транзакций
     и возвращает новый список, содержащий только те словари, у которых ключ содержит переданное в функцию значение."""
+
     def decorator(function: Any) -> Any:
         def wrapper(operation: pd.DataFrame, category: str, date: Optional[pd.Timestamp] = None) -> Any:
             try:
@@ -22,7 +23,9 @@ def report_to_file() -> Any:
             except Exception as e:
                 logger.error(f"Ошибка в функции {function.__name__}: {e}")
                 return None
+
         return wrapper
+
     return decorator
 
 
