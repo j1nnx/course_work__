@@ -29,7 +29,7 @@ logger = setup_logger()
 
 def read_file_xls(filename: Any) -> Any:
     """Function to read a .xls or .json file."""
-    if Path(filename).suffix.lower() == ".xls":
+    if Path(filename).suffix.lower() == ".xlsx":
         df = pd.read_excel(filename)
         logger.info("Successfully read .xls file")
         return df.to_dict(orient="records")

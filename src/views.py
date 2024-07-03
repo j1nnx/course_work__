@@ -1,7 +1,7 @@
 import json
 import os
 from datetime import datetime
-from typing import Any, List, Dict
+from typing import Any
 
 import requests
 import yfinance as yf
@@ -120,11 +120,11 @@ def get_stock_currency(stock: str) -> Any:
 def create_operations(greeting: Any, card_numbers: Any, total_sum: Any, cash: Any, top: Any) -> Any:
     """Возвращает словарь с данными пользователя"""
     data = {"greeting": greeting, "cards": [], "top_transactions": [], "currency_rates": [], "stock_prices": []}
-    if read_file_xls("../data/operation.xls"):
-        for _ in read_file_xls("../data/operation.xls"):
+    if read_file_xls("../data/operation.xlsx"):
+        for _ in read_file_xls("../data/operation.xlsx"):
             if card_numbers not in [card["last_digits"] for card in data["cards"]] and card_numbers is not None:
                 data["cards"].append(
-                    {"last_digits": card_numbers, "total_spent": round (total_sum, 2), "cashback": cash}
+                    {"last_digits": card_numbers, "total_spent": round(total_sum, 2), "cashback": cash}
                 )
         data["top_transactions"] = top
 
@@ -143,12 +143,15 @@ def create_operations(greeting: Any, card_numbers: Any, total_sum: Any, cash: An
 
         data["stock_prices"].append(
             [
-                {"stock": "AAPL", "price": round(get_stock_currency ("AAPL"), 2)},
-                {"stock": "AMZN", "price": round(get_stock_currency ("AMZN"), 2)},
-                {"stock": "GOOGL", "price": round(get_stock_currency ("GOOGL"), 2)},
-                {"stock": "MSFT", "price": round(get_stock_currency ("MSFT"), 2)},
-                {"stock": "TSLA", "price": round(get_stock_currency ("TSLA"), 2)},
+                {"stock": "AAPL", "price": round(get_stock_currency("AAPL"), 2)},
+                {"stock": "AMZN", "price": round(get_stock_currency("AMZN"), 2)},
+                {"stock": "GOOGL", "price": round(get_stock_currency("GOOGL"), 2)},
+                {"stock": "MSFT", "price": round(get_stock_currency("MSFT"), 2)},
+                {"stock": "TSLA", "price": round(get_stock_currency("TSLA"), 2)},
             ]
         )
         logger.info("Функция create_operations работает успешно!")
     return data
+
+
+

@@ -1,11 +1,10 @@
 from datetime import timedelta
-from typing import Any, Dict, Optional, Union
-
+from typing import Any, Optional
+from datetime import datetime
 import pandas as pd
 
-from src.utils import read_file_xls, setup_logger, write_data
+from src.utils import setup_logger, write_data
 
-# reader_operation = read_file_xls("../data/operation.xls")
 logger = setup_logger()
 
 
@@ -29,27 +28,16 @@ def report_to_file() -> Any:
     return decorator
 
 
-@report_to_file()
-def wastes_by_category(transactions: pd.DataFrame, category: str, date: Optional[pd.Timestamp] = None) -> Any:
-    """Функция, которая принимает на вход список транзакций
-    и возвращает новый список, содержащий только те словари, у которых ключ содержит переданное в функцию значение."""
-    transactions = pd.DataFrame(transactions)
-    if date is None:
-        date = pd.to_datetime("today")
-    else:
-        date = pd.to_datetime(date)
-    result: Dict[str, Union[Dict[Any, Any], str, float]] = {}
-    three_months_ago = date - timedelta(days=90)
-    transactions["Дата операции"] = pd.to_datetime(transactions["Дата операции"])
-    total = -transactions[
-        (transactions["Дата операции"] >= three_months_ago)
-        & (transactions["Дата операции"] <= date)
-        & (transactions["Категория"] == category)
-    ]["Сумма операции"]
-    if total.any():
-        result["amount"] = total.to_dict()
-        result["category"] = category
-        result["total"] = total.sum()
-
-    logger.info(f"Successfully operation! Result - {result}")
-    return result
+def filter_transactions_by_category_and_date(
+    transactions: pd.DataFrame, category: str, start_date: str
+) -> list[dict[Any, Any]]:
+    """
+    Фильтрация транзакций по категории и дате.
+    """
+    end_date = datetime.strptime(start_date, "%d.%m.%Y") + timedelta(days=90)
+    filtered_transactions = transactions[
+        (transactions['category'] == category) &
+        (transactions['data_payment'] >= start_date) &
+        (transactions['data_payment'] < end_date.strftime("d.%m.%Y"))
+    ]
+    return filtered_transactions.to_dict('records')

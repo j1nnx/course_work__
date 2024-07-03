@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from src.reports import wastes_by_category
+from src.reports import filter_transactions_by_category_and_date
 from src.services import filter_by_state
 from src.utils import read_file_xls, write_data
 from src.views import card_number, cashback, create_operations, get_greeting, top_transaction, total_sum_amount
@@ -8,17 +8,17 @@ from src.views import card_number, cashback, create_operations, get_greeting, to
 
 def main() -> None:
     """Отвечате за основную логику проекта с пользователем"""
-    read_operation = read_file_xls("../data/operation.xls")
+    read_operation = read_file_xls("../data/operation.xlsx")
     user_currency = input("Какую валюту вы хотели бы добавить к файлу?").split(", ")
     user_stock = input("Какие материалы вы хотели бы добавить к файлу?").split(", ")
     data = {"currency": user_currency, "stock": user_stock}
     write_data("user_settings.json", data)
     time = input("Напишите дату и время(Формат - DD.MM.YYYY HH:MM):")
     greeting = get_greeting(time if time else None)
-    card_numbers = card_number(read_file_xls("../data/operation.xls"))
-    total_sum = total_sum_amount(read_file_xls("../data/operation.xls"), card_numbers)
+    card_numbers = card_number(read_file_xls("../data/operation.xlsx"))
+    total_sum = total_sum_amount(read_file_xls("../data/operation.xlsx"), card_numbers)
     cashbacks = cashback(total_sum)
-    top = top_transaction(read_file_xls("../data/operation.xls"))
+    top = top_transaction(read_file_xls("../data/operation.xlsx"))
     created = create_operations(greeting, card_numbers, total_sum, cashbacks, top)
     write_data("new.json", created)
 
@@ -62,7 +62,8 @@ def main() -> None:
     )
     print(f"Результат просмотра:\n{read_file_xls('new.json')}")
     print(f"Результат обслуживания: \n{transaction}")
-    print(f'Отчеты о результатах: \n{wastes_by_category(read_file_xls(read_operation), "food", datetime(2022, 4, 10))}')
+    print(f'Отчеты о результатах: '
+          f'{filter_transactions_by_category_and_date(read_file_xls(read_operation), "food", datetime(2024, 5, 10))}')
 
 
 if __name__ == "__main__":

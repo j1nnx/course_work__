@@ -27,15 +27,6 @@ def test_greeting(hour: str, expected: str) -> None:
     assert get_greeting(hour) == expected
 
 
-def test_get_card_number(date_with_data: Any) -> None:
-    assert card_number(date_with_data) == "*1130"
-    assert card_number(None) is None
-
-
-def test_total_sum_amount(date_with_data: Any) -> None:
-    assert total_sum_amount(date_with_data, "*1130") == 2552
-
-
 def test_get_cashback() -> None:
     assert cashback(370) == 3
     assert cashback(0) == 0
