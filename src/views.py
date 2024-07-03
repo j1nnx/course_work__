@@ -1,7 +1,7 @@
 import json
 import os
 from datetime import datetime
-from typing import Any
+from typing import Any, List, Dict
 
 import requests
 import yfinance as yf
@@ -15,7 +15,7 @@ logger = setup_logger()
 
 
 def get_greeting(hour: Any) -> str:
-    """Возвращает приветсвие в зависимости от времени"""
+    """Возвращает приветствие в зависимости от времени"""
     if hour is None:
         hour = datetime.now()
     else:
@@ -36,14 +36,14 @@ def card_number(read: Any) -> Any:
     if read is not None:
         for transaction in read:
             return transaction["Номер карты"]
-        logger.info("Функция card_number рабоатет успешно")
+        logger.info("Функция card_number работает успешно")
     else:
         logger.error("С функцией card_number что-то не так")
         return None
 
 
 def total_sum_amount(reader: Any, card_number_: Any) -> Any:
-    """Возваращет общую сумму всех транзакций пользователя"""
+    """Возвращает общую сумму всех транзакций пользователя"""
     total = 0
     if card_number_:
         for transaction in reader:
@@ -53,7 +53,7 @@ def total_sum_amount(reader: Any, card_number_: Any) -> Any:
 
 
 def cashback(total_sum: int) -> Any:
-    """Возваращает кешбек"""
+    """Возвращает кешбек"""
     cash = total_sum // 100
     logger.info("Successfully! Result - %s" % cash)
     return cash
@@ -95,9 +95,14 @@ def get_currency(currency: Any) -> Any:
     url = f"https://api.apilayer.com/exchangerates_data/latest?symbols=RUB&base={currency}"
     response = requests.get(url, headers={"api_key": api_key}, timeout=15)
     response_data = json.loads(response.text)
-    rate = response_data["rates"]["RUB"]
-    logger.info("Функция get_currency работает успешно!")
-    return rate
+
+    if "rates" in response_data and "RUB" in response_data["rates"]:
+        rate = response_data["rates"]["RUB"]
+        logger.info("Функция get_currency работает успешно!")
+        return rate
+    else:
+        logger.error(f"Ошибка в ответе API: {response_data}")
+        return None
 
 
 def get_stock_currency(stock: str) -> Any:
@@ -119,22 +124,30 @@ def create_operations(greeting: Any, card_numbers: Any, total_sum: Any, cash: An
         for _ in read_file_xls("../data/operation.xls"):
             if card_numbers not in [card["last_digits"] for card in data["cards"]] and card_numbers is not None:
                 data["cards"].append(
-                    {"last_digits": card_numbers, "total_spent": round(total_sum, 2), "cashback": cash}
+                    {"last_digits": card_numbers, "total_spent": round (total_sum, 2), "cashback": cash}
                 )
         data["top_transactions"] = top
-        data["currency_rates"].append(
-            (
-                {"currency": "USD", "rate": round(get_currency("USD"), 2)},
-                {"currency": "EUR", "rate": round(get_currency("EUR"), 2)},
+
+        usd_rate = get_currency("USD")
+        eur_rate = get_currency("EUR")
+
+        if usd_rate is not None and eur_rate is not None:
+            data["currency_rates"].append(
+                (
+                    {"currency": "USD", "rate": round(usd_rate, 2)},
+                    {"currency": "EUR", "rate": round(eur_rate, 2)},
+                )
             )
-        )
+        else:
+            logger.error("Failed to retrieve currency rates")
+
         data["stock_prices"].append(
             [
-                {"stock": "AAPL", "price": round(get_stock_currency("AAPL"), 2)},
-                {"stock": "AMZN", "price": round(get_stock_currency("AMZN"), 2)},
-                {"stock": "GOOGL", "price": round(get_stock_currency("GOOGL"), 2)},
-                {"stock": "MSFT", "price": round(get_stock_currency("MSFT"), 2)},
-                {"stock": "TSLA", "price": round(get_stock_currency("TSLA"), 2)},
+                {"stock": "AAPL", "price": round(get_stock_currency ("AAPL"), 2)},
+                {"stock": "AMZN", "price": round(get_stock_currency ("AMZN"), 2)},
+                {"stock": "GOOGL", "price": round(get_stock_currency ("GOOGL"), 2)},
+                {"stock": "MSFT", "price": round(get_stock_currency ("MSFT"), 2)},
+                {"stock": "TSLA", "price": round(get_stock_currency ("TSLA"), 2)},
             ]
         )
         logger.info("Функция create_operations работает успешно!")

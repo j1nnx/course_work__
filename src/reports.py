@@ -5,7 +5,7 @@ import pandas as pd
 
 from src.utils import read_file_xls, setup_logger, write_data
 
-reader_operation = read_file_xls("../data/operation.xls")
+# reader_operation = read_file_xls("../data/operation.xls")
 logger = setup_logger()
 
 
