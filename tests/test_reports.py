@@ -1,7 +1,5 @@
-import pytest
 import pandas as pd
 from src.reports import filter_transactions_by_category_and_date
-from typing import Any
 
 
 def test_filter_transactions_empty_result():
