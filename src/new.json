@@ -1,0 +1,67 @@
+{
+    "greeting": "Добрый день",
+    "cards": [
+        {
+            "last_digits": "*1781",
+            "total_spent": -6564,
+            "cashback": -66
+        }
+    ],
+    "top_transactions": [
+        {
+            "date": "17.06.2024 08:42:58",
+            "amount": 2000,
+            "category": "Переводы",
+            "description": "Перевод между счетами"
+        },
+        {
+            "date": "17.06.2024 07:45:28",
+            "amount": 2000,
+            "category": "Переводы",
+            "description": "Алексей П."
+        },
+        {
+            "date": "12.06.2024 14:20:34",
+            "amount": 2000,
+            "category": "Переводы",
+            "description": "Алексей П."
+        },
+        {
+            "date": "10.06.2024 09:34:37",
+            "amount": 2000,
+            "category": "Переводы",
+            "description": "Алексей П."
+        },
+        {
+            "date": "03.06.2024 11:15:19",
+            "amount": 2000,
+            "category": "Переводы",
+            "description": "Ирина П."
+        }
+    ],
+    "currency_rates": [],
+    "stock_prices": [
+        [
+            {
+                "stock": "AAPL",
+                "price": 220.73
+            },
+            {
+                "stock": "AMZN",
+                "price": 200.0
+            },
+            {
+                "stock": "GOOGL",
+                "price": 185.25
+            },
+            {
+                "stock": "MSFT",
+                "price": 460.13
+            },
+            {
+                "stock": "TSLA",
+                "price": 239.3
+            }
+        ]
+    ]
+}
