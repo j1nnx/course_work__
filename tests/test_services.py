@@ -61,4 +61,3 @@ def test_filter_by_state() -> None:
 
     result = filter_by_state(operation)
     assert result == expected_output
-

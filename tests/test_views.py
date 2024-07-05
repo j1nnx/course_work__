@@ -6,7 +6,7 @@ from unittest.mock import patch
 from pytest import fixture, mark
 
 from src.utils import read_file_xls
-from src.views import card_number, cashback, get_currency, get_greeting, get_stock_currency, total_sum_amount
+from src.views import cashback, get_currency, get_greeting, get_stock_currency
 
 
 @fixture()

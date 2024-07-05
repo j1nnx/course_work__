@@ -1,6 +1,6 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 from typing import Any, Optional
-from datetime import datetime
+
 import pandas as pd
 
 from src.utils import setup_logger, write_data
@@ -30,14 +30,14 @@ def report_to_file() -> Any:
 
 def filter_transactions_by_category_and_date(
     transactions: pd.DataFrame, category: str, start_date: str
-) -> list[dict[Any, Any]]:
+) -> pd.DataFrame:
     """
     Фильтрация транзакций по категории и дате.
     """
     end_date = datetime.strptime(start_date, "%d.%m.%Y") + timedelta(days=90)
     filtered_transactions = transactions[
-        (transactions['category'] == category) &
-        (transactions['data_payment'] >= start_date) &
-        (transactions['data_payment'] < end_date.strftime("d.%m.%Y"))
+        (transactions["category"] == category)
+        & (transactions["data_payment"] >= start_date)
+        & (transactions["data_payment"] < end_date.strftime("d.%m.%Y"))
     ]
-    return filtered_transactions.to_dict('records')
+    return filtered_transactions.to_dict("records")
