@@ -1,6 +1,6 @@
+from src.reports import main_reports
 from src.services import main_services
 from src.views import main_views
-from src.reports import main_reports
 
 
 def main() -> None:

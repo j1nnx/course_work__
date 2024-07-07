@@ -1,4 +1,5 @@
 from typing import Any
+
 from src.utils import read_file_xls, setup_logger, write_data
 
 logger = setup_logger()
@@ -13,14 +14,12 @@ def filter_by_state(operation: Any) -> Any:
     for transaction in operation:
         if "Переводы" in transaction["Категория"] and transaction["Описание"].endswith("."):
             data.append(transaction)
-    logger.info("Функция filter_by_state работает успешно")
     write_data("results.json", data)
     return data
 
 
 def main_services() -> None:
     """Главная функция в этом модуле"""
-    read_operation = read_file_xls("../data/operation.xlsx")
     transaction = filter_by_state(
         [
             {
@@ -59,5 +58,5 @@ def main_services() -> None:
             },
         ]
     )
-    print(f"Результат просмотра:\n{read_file_xls('new.json')}")
+    print(f"Результат просмотра:\n{read_file_xls('../data/operation.xlsx')}")
     print(f"Результат обслуживания: \n{transaction}")

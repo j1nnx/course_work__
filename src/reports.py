@@ -1,36 +1,26 @@
 from datetime import datetime, timedelta
 from typing import Any, Optional
-from src.utils import read_file_xls
+
 import pandas as pd
 
-from src.utils import setup_logger, write_data
+from src.utils import read_file_xls, setup_logger, write_data
 
 logger = setup_logger()
 
 
-def report_to_file() -> Any:
-    """Функция, которая принимает на вход список транзакций
-    и возвращает новый список, содержащий только те словари, у которых ключ содержит переданное в функцию значение."""
-
-    def decorator(function: Any) -> Any:
-        def wrapper(operation: pd.DataFrame, category: str, date: Optional[pd.Timestamp] = None) -> Any:
-            try:
-                data = function(operation, category, date)
-                write_data("result.json", data)
-                logger.info(f"Операция выполнена успешно! Result - {data}")
-                return data
-            except Exception as e:
-                logger.error(f"Ошибка в функции {function.__name__}: {e}")
-                return None
-
-        return wrapper
-
-    return decorator
+def read_transactions_xlsx(file_path: str) -> pd.DataFrame:
+    """
+    Чтение финансовых операций из XLSX-файла.
+    """
+    logger.info(f"Чтение данных из файла {file_path}")
+    try:
+        return pd.read_excel(file_path)
+    except FileNotFoundError:
+        logger.error(f"Файл {file_path} не найден")
+        return pd.DataFrame()
 
 
-def filter_transactions(
-    transactions: pd.DataFrame, category: str, start_date: str
-) -> pd.DataFrame:
+def filter_transactions(transactions: pd.DataFrame, category: str, start_date: str) -> pd.DataFrame:
     """
     Фильтрация транзакций по категории и дате.
     """
@@ -44,8 +34,4 @@ def filter_transactions(
 
 
 def main_reports() -> None:
-    read_operation = read_file_xls("../data/operation.xlsx")
-    print(
-        f"Отчеты о результатах: "
-        f'{filter_transactions(read_file_xls(read_operation), "food", datetime(2024, 5, 10).strftime("%Y-%m-%d"))}'
-    )
+    pass

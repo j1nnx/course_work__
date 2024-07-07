@@ -36,10 +36,6 @@ def card_number(read: Any) -> Any:
     if read is not None:
         for transaction in read:
             return transaction["Номер карты"]
-        logger.info("Функция card_number работает успешно")
-    else:
-        logger.error("С функцией card_number что-то не так")
-        return None
 
 
 def total_sum_amount(reader: Any, card_number_: Any) -> Any:
@@ -48,26 +44,21 @@ def total_sum_amount(reader: Any, card_number_: Any) -> Any:
     if card_number_:
         for transaction in reader:
             total += transaction["Сумма операции"]
-    logger.info("Successfully! Result - %s" % total)
     return round(total)
 
 
 def cashback(total_sum: int) -> Any:
     """Возвращает кешбек"""
     cash = total_sum // 100
-    logger.info("Successfully! Result - %s" % cash)
     return cash
 
 
 def top_transaction(data: Any) -> Any:
     """Возвращает топ 5 транзакций пользователя"""
     if data is not None:
-
         def sort_sum(item: Any) -> Any:
             return item["Сумма операции"]
-
         data.sort(key=sort_sum, reverse=True)
-
         result = []
         count = 0
         for transaction in data:
@@ -83,10 +74,8 @@ def top_transaction(data: Any) -> Any:
                 count += 1
             else:
                 break
-        logger.info("Successfully! Result - %s" % result)
         return result
     else:
-        logger.error("Something went wrong in 'top_transactions' function...")
         return None
 
 
@@ -98,11 +87,7 @@ def get_currency(currency: Any) -> Any:
 
     if "rates" in response_data and "RUB" in response_data["rates"]:
         rate = response_data["rates"]["RUB"]
-        logger.info("Функция get_currency работает успешно!")
         return rate
-    else:
-        logger.error(f"Ошибка в ответе API: {response_data}")
-        return None
 
 
 def get_stock_currency(stock: str) -> Any:
@@ -111,7 +96,6 @@ def get_stock_currency(stock: str) -> Any:
     data_todays = ticker.history(period="1d")
     if not data_todays.empty:
         high_price = data_todays["High"].iloc[0]
-        logger.info("Функция get_stock_currency работает успешно!")
         return high_price
     else:
         return 0.0
@@ -138,8 +122,6 @@ def create_operations(greeting: Any, card_numbers: Any, total_sum: Any, cash: An
                     {"currency": "EUR", "rate": round(eur_rate, 2)},
                 )
             )
-        else:
-            logger.error("Failed to retrieve currency rates")
 
         data["stock_prices"].append(
             [
@@ -150,7 +132,6 @@ def create_operations(greeting: Any, card_numbers: Any, total_sum: Any, cash: An
                 {"stock": "TSLA", "price": round(get_stock_currency("TSLA"), 2)},
             ]
         )
-        logger.info("Функция create_operations работает успешно!")
     return data
 
 

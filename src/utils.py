@@ -27,30 +27,20 @@ def setup_logger() -> Logger:
 logger = setup_logger()
 
 
-def read_file_xls(filename: Any) -> Any:
+def read_file_xls(filename: Any) -> Any | Path:
     """Function to read a .xls or .json file."""
     if Path(filename).suffix.lower() == ".xlsx":
         df = pd.read_excel(filename)
-        logger.info("Successfully read .xls file")
         return df.to_dict(orient="records")
-    elif Path(filename).suffix.lower() == ".json":
-        with open(filename, "r", encoding="utf-8") as file:
-            logger.info("Successfully read .json file")
-            return json.load(file)
     else:
-        logger.error("Unsupported file format")
-        print("Unsupported file format")
+        raise ValueError("Invalid file format")
 
 
 def write_data(file: str, result: Any) -> None:
     """Function to write results to the specified file."""
-    try:
-        if file.endswith(".txt"):
-            with open(file, "a", encoding="utf-8") as f:
-                f.write(result)
-        else:
-            with open(file, "w", encoding="utf-8") as f:
-                json.dump(result, f, indent=4, ensure_ascii=False)
-        logger.info(f"Successfully wrote to file {file}")
-    except Exception as e:
-        logger.error(f"Error writing to file {file}: {e}")
+    if file.endswith(".txt"):
+        with open(file, "a", encoding="utf-8") as f:
+            f.write(result)
+    else:
+        with open(file, "w", encoding="utf-8") as f:
+            json.dump(result, f, indent=4, ensure_ascii=False)
