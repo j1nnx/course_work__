@@ -1,6 +1,6 @@
 import pandas as pd
 
-from src.reports import filter_transactions_by_category_and_date
+from src.reports import filter_transactions
 
 
 def test_filter_transactions_empty_result() -> None:
@@ -10,6 +10,6 @@ def test_filter_transactions_empty_result() -> None:
     category = "Electronics"
     start_date = "01.01.2023"
 
-    filtered_transactions = filter_transactions_by_category_and_date(transactions, category, start_date)
+    filtered_transactions = filter_transactions(transactions, category, start_date)
 
     assert len(filtered_transactions) == 0

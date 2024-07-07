@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from typing import Any, Optional
-
+from src.utils import read_file_xls
 import pandas as pd
 
 from src.utils import setup_logger, write_data
@@ -28,7 +28,7 @@ def report_to_file() -> Any:
     return decorator
 
 
-def filter_transactions_by_category_and_date(
+def filter_transactions(
     transactions: pd.DataFrame, category: str, start_date: str
 ) -> pd.DataFrame:
     """
@@ -41,3 +41,11 @@ def filter_transactions_by_category_and_date(
         & (transactions["data_payment"] < end_date.strftime("d.%m.%Y"))
     ]
     return filtered_transactions.to_dict("records")
+
+
+def main_reports() -> None:
+    read_operation = read_file_xls("../data/operation.xlsx")
+    print(
+        f"Отчеты о результатах: "
+        f'{filter_transactions(read_file_xls(read_operation), "food", datetime(2024, 5, 10).strftime("%Y-%m-%d"))}'
+    )

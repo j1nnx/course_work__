@@ -1,7 +1,4 @@
-from datetime import datetime
 from typing import Any
-
-from src.reports import filter_transactions_by_category_and_date
 from src.utils import read_file_xls, setup_logger, write_data
 
 logger = setup_logger()
@@ -64,7 +61,3 @@ def main_services() -> None:
     )
     print(f"Результат просмотра:\n{read_file_xls('new.json')}")
     print(f"Результат обслуживания: \n{transaction}")
-    print(
-        f"Отчеты о результатах: "
-        f'{filter_transactions_by_category_and_date(read_file_xls(read_operation), "food", datetime(2024, 5, 10).strftime("%Y-%m-%d"))}'
-    )
