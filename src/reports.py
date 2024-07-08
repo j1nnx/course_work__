@@ -1,9 +1,8 @@
 from datetime import datetime, timedelta
-from typing import Any, Optional
 
 import pandas as pd
 
-from src.utils import read_file_xls, setup_logger, write_data
+from src.utils import setup_logger
 
 logger = setup_logger()
 

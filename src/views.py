@@ -56,8 +56,10 @@ def cashback(total_sum: int) -> Any:
 def top_transaction(data: Any) -> Any:
     """Возвращает топ 5 транзакций пользователя"""
     if data is not None:
+
         def sort_sum(item: Any) -> Any:
             return item["Сумма операции"]
+
         data.sort(key=sort_sum, reverse=True)
         result = []
         count = 0
@@ -105,11 +107,8 @@ def create_operations(greeting: Any, card_numbers: Any, total_sum: Any, cash: An
     """Возвращает словарь с данными пользователя"""
     data = {"greeting": greeting, "cards": [], "top_transactions": [], "currency_rates": [], "stock_prices": []}
     if read_file_xls("../data/operation.xlsx"):
-        for _ in read_file_xls("../data/operation.xlsx"):
-            if card_numbers not in [card["last_digits"] for card in data["cards"]] and card_numbers is not None:
-                data["cards"].append(
-                    {"last_digits": card_numbers, "total_spent": round(total_sum, 2), "cashback": cash}
-                )
+        if card_numbers not in [card["last_digits"] for card in data["cards"]] and card_numbers is not None:
+            data["cards"].append({"last_digits": card_numbers, "total_spent": round(total_sum, 2), "cashback": cash})
         data["top_transactions"] = top
 
         usd_rate = get_currency("USD")
