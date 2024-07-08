@@ -2,11 +2,13 @@ import json
 from typing import Any
 from unittest import mock
 from unittest.mock import patch
+import unittest
 
 from pytest import fixture, mark
 
 from src.utils import read_file_xls
-from src.views import cashback, get_currency, get_greeting, get_stock_currency
+from src.views import (cashback, get_currency, get_greeting, get_stock_currency, card_number, total_sum_amount,
+                       top_transaction)
 
 
 @fixture()
@@ -54,3 +56,27 @@ def test_get_stock_currency() -> None:
 
         assert result == 0.0
         mock_yf.Ticker.assert_called_once_with("AAPL")
+
+
+class TestCardNumberFunction(unittest.TestCase):
+
+    def test_with_transactions(self):
+        transactions = [
+            {"Номер карты": "1234567890123456", "Сумма": 100},
+            {"Номер карты": "6543210987654321", "Сумма": 200}
+        ]
+        self.assertEqual(card_number(transactions), "1234567890123456")
+
+
+class TestTotalSumAmountFunction(unittest.TestCase):
+
+    def test_with_transactions(self):
+        transactions = []
+        self.assertEqual(total_sum_amount(transactions, "1234567890123456"), 0)
+
+
+class TestTopTransactionFunction(unittest.TestCase):
+
+    def test_with_empty_list(self):
+        transactions = []
+        self.assertEqual(top_transaction(transactions), [])
